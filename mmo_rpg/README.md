@@ -16,6 +16,12 @@ If Panda3D does not install automatically, run:
 python3 -m pip install panda3d==1.10.14
 ```
 
+If `websockets` fails to install, install it manually as well:
+
+```zsh
+python3 -m pip install websockets
+```
+
 ## Running
 
 Start the websocket server:

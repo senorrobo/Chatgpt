@@ -19,6 +19,12 @@ If Panda3D fails to install automatically (which can happen on some systems), ru
 python3 -m pip install panda3d==1.10.14
 ```
 
+If the `websockets` package doesn't install for some reason, install it manually:
+
+```zsh
+python3 -m pip install websockets
+```
+
 ## MMO RPG Skeleton
 
 Run the websocket server:
