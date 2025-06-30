@@ -89,13 +89,13 @@ pip install -r ../requirements.txt
 If Panda3D fails to install automatically, run:
 
 ```zsh
-pip install panda3d==1.10.14
+python3 -m pip install panda3d==1.10.14
 ```
 
 For a minimal local demonstration using Panda3D, run:
 
 ```zsh
-python main.py <race>
+python3 main.py <race>
 ```
 
 Replace `<race>` with one of `vampire`, `werewolf`, `elf`, or `human`. The demo shows a basic environment with a day/night cycle and displays your chosen race.

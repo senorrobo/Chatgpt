@@ -7,16 +7,16 @@ This repository contains experimental game projects. The `mmo_rpg` directory inc
 ./soultopia
 ```
 
-Install dependencies (which include Panda3D) with:
+These instructions work on macOS and Linux. Install dependencies (which include Panda3D) with:
 
 ```zsh
-pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 ```
 
 If Panda3D fails to install automatically, install it manually with:
 
 ```zsh
-pip install panda3d==1.10.14
+python3 -m pip install panda3d==1.10.14
 ```
 
 See the respective `README.md` files for details.
@@ -25,5 +25,5 @@ To try the Soultopia demo, run:
 
 ```zsh
 cd soultopia
-python main.py human
+python3 main.py human
 ```
