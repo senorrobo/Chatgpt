@@ -2,13 +2,18 @@ import asyncio
 
 try:
     from direct.showbase.ShowBase import ShowBase
-    from panda3d.core import Vec3, WindowProperties
+    from panda3d.core import (
+        Vec3,
+        WindowProperties,
+    )
     from panda3d.bullet import (
         BulletWorld,
         BulletPlaneShape,
         BulletRigidBodyNode,
         BulletCapsuleShape,
         BulletCharacterControllerNode,
+        BulletTriangleMesh,
+        BulletTriangleMeshShape,
     )
 except ModuleNotFoundError:
     print(
@@ -28,7 +33,6 @@ class MMORPG(ShowBase):
         self.disableMouse()
         props = WindowProperties()
         props.setCursorHidden(True)
-        props.setMouseMode(WindowProperties.M_relative)
         self.win.requestProperties(props)
         self.cam_pitch = 0.0
 
@@ -87,18 +91,37 @@ class MMORPG(ShowBase):
             self.character.doJump()
 
     def load_chunk(self, cx: int, cy: int) -> None:
+        """Load a terrain chunk with a static Bullet collider."""
         if (cx, cy) in self.loaded_chunks:
             return
-        chunk = self.loader.loadModel("models/environment")
-        chunk.reparent_to(self.render)
-        chunk.set_scale(0.25)
-        chunk.set_pos(cx * self.CHUNK_SIZE - 8, cy * self.CHUNK_SIZE + 42, 0)
-        self.loaded_chunks[(cx, cy)] = chunk
+        model = self.loader.loadModel("models/environment")
+        model.setScale(0.25)
+        model.setPos(cx * self.CHUNK_SIZE - 8, cy * self.CHUNK_SIZE + 42, 0)
+
+        mesh = BulletTriangleMesh()
+        for np in model.findAllMatches('**/+GeomNode'):
+            geom_node = np.node()
+            for i in range(geom_node.getNumGeoms()):
+                mesh.addGeom(geom_node.getGeom(i))
+        shape = BulletTriangleMeshShape(mesh, dynamic=False)
+        body = BulletRigidBodyNode(f"chunk-{cx}-{cy}")
+        body.addShape(shape)
+        body_np = self.render.attachNewNode(body)
+        body_np.setPos(model.getPos())
+        body_np.setHpr(model.getHpr())
+        body_np.setScale(model.getScale())
+        self.world.attachRigidBody(body)
+        model.reparentTo(body_np)
+        model.setPos(0, 0, 0)
+
+        self.loaded_chunks[(cx, cy)] = body_np
 
     def unload_chunk(self, cx: int, cy: int) -> None:
         node = self.loaded_chunks.pop((cx, cy), None)
         if node:
-            node.remove_node()
+            if isinstance(node.node(), BulletRigidBodyNode):
+                self.world.removeRigidBody(node.node())
+            node.removeNode()
 
     def update_chunks(self) -> None:
         px = int(round(self.character_np.getX() / self.CHUNK_SIZE))
@@ -117,11 +140,11 @@ class MMORPG(ShowBase):
         # Mouse look
         if self.mouseWatcherNode.hasMouse():
             md = self.win.getPointer(0)
-            x = md.getX()
-            y = md.getY()
+            dx = md.getX() - self.win.getXSize() / 2
+            dy = md.getY() - self.win.getYSize() / 2
             self.win.movePointer(0, self.win.getXSize() // 2, self.win.getYSize() // 2)
-            self.character_np.setH(self.character_np.getH() - (x - self.win.getXSize() / 2) * 0.1)
-            self.cam_pitch = max(-90.0, min(90.0, self.cam_pitch - (y - self.win.getYSize() / 2) * 0.1))
+            self.character_np.setH(self.character_np.getH() - dx * 0.1)
+            self.cam_pitch = max(-90.0, min(90.0, self.cam_pitch - dy * 0.1))
             self.camera.setP(self.cam_pitch)
 
         # Movement
