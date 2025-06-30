@@ -33,7 +33,8 @@ In another terminal, launch the Panda3D client:
 ```zsh
 python3 main.py
 ```
-The client now includes basic WASD movement, a first-person camera, and Bullet physics.
+The client now includes basic WASD movement, a first-person camera, Bullet physics,
+and dynamically loaded environment chunks so only nearby terrain is generated.
 
 ## Soultopia Demo
 

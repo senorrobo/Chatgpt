@@ -30,4 +30,4 @@ Open another terminal in this directory and run the client:
 python3 main.py
 ```
 
-The client now features simple player movement, an FPS-style camera, and basic physics using Panda3D's Bullet engine. Use this as a starting point for your own MMO project.
+The client now features simple player movement, an FPS-style camera, and basic physics using Panda3D's Bullet engine. Terrain chunks are streamed in around the player so only nearby areas are generated, keeping performance high. Use this as a starting point for your own MMO project.

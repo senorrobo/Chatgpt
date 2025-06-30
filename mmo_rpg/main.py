@@ -57,11 +57,10 @@ class MMORPG(ShowBase):
 
         self.set_background_color(0, 0, 0.2)
 
-        # Load a simple environment model
-        self.environ = self.loader.loadModel("models/environment")
-        self.environ.reparent_to(self.render)
-        self.environ.set_scale(0.25)
-        self.environ.set_pos(-8, 42, 0)
+        # Dynamically loaded environment chunks for better performance
+        self.CHUNK_SIZE = 40
+        self.loaded_chunks: dict[tuple[int, int], "NodePath"] = {}
+        self.update_chunks()
 
         # Keyboard controls
         self.keys = {"forward": False, "back": False, "left": False, "right": False}
@@ -76,6 +75,7 @@ class MMORPG(ShowBase):
         self.accept("space", self.do_jump)
 
         self.taskMgr.add(self.update, "update")
+        self.setFrameRateMeter(True)
 
     def set_key(self, name: str, value: bool) -> None:
         self.keys[name] = value
@@ -85,6 +85,31 @@ class MMORPG(ShowBase):
             self.character.setMaxJumpHeight(2.0)
             self.character.setJumpSpeed(8.0)
             self.character.doJump()
+
+    def load_chunk(self, cx: int, cy: int) -> None:
+        if (cx, cy) in self.loaded_chunks:
+            return
+        chunk = self.loader.loadModel("models/environment")
+        chunk.reparent_to(self.render)
+        chunk.set_scale(0.25)
+        chunk.set_pos(cx * self.CHUNK_SIZE - 8, cy * self.CHUNK_SIZE + 42, 0)
+        self.loaded_chunks[(cx, cy)] = chunk
+
+    def unload_chunk(self, cx: int, cy: int) -> None:
+        node = self.loaded_chunks.pop((cx, cy), None)
+        if node:
+            node.remove_node()
+
+    def update_chunks(self) -> None:
+        px = int(round(self.character_np.getX() / self.CHUNK_SIZE))
+        py = int(round(self.character_np.getY() / self.CHUNK_SIZE))
+        needed = {(px + dx, py + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1)}
+
+        for coord in list(self.loaded_chunks.keys()):
+            if coord not in needed:
+                self.unload_chunk(*coord)
+        for coord in needed:
+            self.load_chunk(*coord)
 
     def update(self, task):
         dt = globalClock.getDt()
@@ -115,6 +140,9 @@ class MMORPG(ShowBase):
 
         # Step the physics world
         self.world.doPhysics(dt, 4, 1 / 240.0)
+
+        # Dynamically load nearby terrain
+        self.update_chunks()
         return task.cont
 
 
