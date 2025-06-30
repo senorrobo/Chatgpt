@@ -30,4 +30,4 @@ Open another terminal in this directory and run the client:
 python3 main.py
 ```
 
-The client simply loads Panda3D's sample environment and connects to the server. Use it as a starting point for your own MMO project.
+The client now features simple player movement, an FPS-style camera, and basic physics using Panda3D's Bullet engine. Use this as a starting point for your own MMO project.
