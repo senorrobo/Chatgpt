@@ -1,29 +1,48 @@
 # Chatgpt Game Projects
 
-This repository contains experimental game projects. The `mmo_rpg` directory includes a simple 3D MMO RPG skeleton built with Panda3D. A full game design document for a much larger concept, **Soultopia**, along with a small demo, can be found in the `soultopia` directory.
+This repository hosts two small game examples built with [Panda3D](https://www.panda3d.org/).
 
-```
-./mmo_rpg
-./soultopia
-```
+- `mmo_rpg` – a bare-bones 3D MMO RPG skeleton showing a simple Panda3D client and websocket server.
+- `soultopia` – a demo and design document for a large scale MMORPG concept.
 
-These instructions work on macOS and Linux. Install dependencies (which include Panda3D) with:
+## Setup
+
+These projects work on macOS and Linux. Install the dependencies into your Python environment:
 
 ```zsh
 python3 -m pip install -r requirements.txt
 ```
 
-If Panda3D fails to install automatically, install it manually with:
+If Panda3D fails to install automatically (which can happen on some systems), run:
 
 ```zsh
 python3 -m pip install panda3d==1.10.14
 ```
 
-See the respective `README.md` files for details.
+## MMO RPG Skeleton
 
-To try the Soultopia demo, run:
+Run the websocket server:
+
+```zsh
+cd mmo_rpg
+python3 server.py
+```
+
+In another terminal, launch the Panda3D client:
+
+```zsh
+python3 main.py
+```
+
+## Soultopia Demo
+
+The Soultopia directory contains the design document and a small race selection demo. Start it with:
 
 ```zsh
 cd soultopia
-python3 main.py human
+python3 main.py <race>
 ```
+
+Replace `<race>` with `vampire`, `werewolf`, `elf`, or `human`.
+
+See `soultopia/README.md` for lore and gameplay ideas.

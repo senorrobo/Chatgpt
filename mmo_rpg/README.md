@@ -1,35 +1,33 @@
 # Simple 3D MMO RPG Skeleton
 
-This directory contains a minimal skeleton of a 3D MMO RPG game using [Panda3D](https://www.panda3d.org/).
+This directory contains a minimal 3D multiplayer demo built with [Panda3D](https://www.panda3d.org/) and `websockets`.
 
-## Requirements
-- Python 3.8+
-- `panda3d`
-- `websockets`
+## Setup
 
-Install dependencies using the repository's requirements file (which will install Panda3D and websockets):
+Install the shared dependencies from the repository root:
 
 ```zsh
 python3 -m pip install -r ../requirements.txt
 ```
 
-If Panda3D fails to install automatically, run:
+If Panda3D does not install automatically, run:
 
 ```zsh
 python3 -m pip install panda3d==1.10.14
 ```
 
-## Running the Server
+## Running
+
+Start the websocket server:
 
 ```zsh
 python3 server.py
 ```
 
-## Running the Client
+Open another terminal in this directory and run the client:
 
 ```zsh
 python3 main.py
 ```
 
-The current implementation only loads a simple environment model and sets up a minimal websocket server for multiplayer communication. Use this as a starting point for building a full MMO RPG.
-
+The client simply loads Panda3D's sample environment and connects to the server. Use it as a starting point for your own MMO project.

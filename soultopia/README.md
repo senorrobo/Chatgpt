@@ -1,6 +1,7 @@
 # Soultopia Game Design Document
 
 "Soultopia" is a dark fantasy MMORPG set in a world torn by eternal war between four races: Vampires, Werewolves, Elves, and Humans. This document outlines the core design pillars, world building, character concepts, and major gameplay systems for a AAA-quality implementation.
+The directory also includes a small Panda3D demo showcasing a simple environment and race selection.
 
 ## Core Pillars
 - **Dark Fantasy Setting** with rich lore and morally grey conflicts.
@@ -83,7 +84,7 @@ This design document provides a foundation for developing Soultopia into a compe
 Install dependencies using the repository's requirements file:
 
 ```zsh
-pip install -r ../requirements.txt
+python3 -m pip install -r ../requirements.txt
 ```
 
 If Panda3D fails to install automatically, run:
